@@ -1,17 +1,18 @@
 ﻿using System;
 using System.IO;
+using System.Numerics;
+using System.Reflection.Metadata.Ecma335;
+using System.Security.Cryptography.X509Certificates;
+using System.Xml.Serialization;
 
 namespace laboratorioempresa1
 {
     class Program
     {
         static string inventario = "Inventario.txt";
+        static string inventario2 = "Inventario nuevo.txt";
 
         static string facturacion = "Facturación.txt";
-
-        static string inventario2 = "Inventario.txt";
-
-        static string facturacion2 = "Facturación.txt";
 
         static string usuariosa = "Usuariosadmin.txt";
         static string usuariost = "Usuariostrab.txt";
@@ -20,8 +21,9 @@ namespace laboratorioempresa1
         static StreamReader leer;
         static StreamWriter escribir;
 
-
+       
         static int correlativo = 0;
+        static int opcion = 0;
 
 
         static void lecturainv(string l)
@@ -29,6 +31,17 @@ namespace laboratorioempresa1
             string guardar = "";
             archivo = new FileStream(l, FileMode.Open, FileAccess.Read);
             leer = new StreamReader(inventario);
+            guardar = leer.ReadToEnd();
+            Console.WriteLine(guardar);
+            leer.Close();
+
+        }
+
+        static void lecturainv2(string l)
+        {
+            string guardar = "";
+            archivo = new FileStream(l, FileMode.Open, FileAccess.Read);
+            leer = new StreamReader(inventario2);
             guardar = leer.ReadToEnd();
             Console.WriteLine(guardar);
             leer.Close();
@@ -68,116 +81,107 @@ namespace laboratorioempresa1
 
         }
 
-        static void inicioinv()
+        static void inicio()
         {
             escribir = File.AppendText(inventario);
-            escribir.WriteLine("INVENTARIO");
+            escribir.WriteLine("");
             escribir.Close();
-        }
-
-        static void inicious()
-        {
+        
             escribir = File.AppendText(usuariosa);
-            escribir.WriteLine("USUARIOS ADMINISTRADOR");
+            escribir.WriteLine("");
             escribir.Close();
-        }
-
-        static void inicious2()
-        {
+        
             escribir = File.AppendText(usuariost);
-            escribir.WriteLine("USUARIOS TRABAJADOR");
+            escribir.WriteLine("");
             escribir.Close();
-        }
-
-        static void iniciofac()
-        {
+        
             escribir = File.AppendText(facturacion);
-            escribir.WriteLine("FACTURAS");
+            escribir.WriteLine("");
             escribir.Close();
         }
 
         static void funcioninicial()
         {
-            Console.WriteLine("EMPRESA LOS PATOS");
-            Console.WriteLine(" Seleccione el puesto que ocupa\n  1. Administrador 2. Trabajador");
-            Console.Write("  ");
-            int opcion = int.Parse(Console.ReadLine());
-            if (opcion == 1)
+            
+            while (opcion != 3)
             {
-                Console.Write("Escriba su código: ");
-                string cod = Console.ReadLine();
-                if (cod == "admin")
+                Console.WriteLine("\nEMPRESA LOS PATOS");
+                Console.Write(" Seleccione \n  1. Administrador 2. Trabajador 3. Menú para salir   ");
+                opcion = int.Parse(Console.ReadLine());
+                if (opcion == 1)
                 {
-                    menua();
-                }
-
-                else
-                {
-                    string linea = "";
-                    using (leer = new StreamReader(usuariosa))
+                    Console.Write("   Escriba su código: ");
+                    string cod = Console.ReadLine();
+                    if (cod == "admin")
                     {
-                        while ((linea = leer.ReadLine()) != null)
-                        {
-                            string[] datos = linea.Split('-');
-                            if (cod == datos[0])
-                            { menua(); }
-                        }
-
-                        leer.Close();
+                        menua();
                     }
 
-                }
-            }
-
-            else if (opcion == 2)
-            {
-                Console.WriteLine("Escriba su código");
-                string cod = Console.ReadLine();
-
-                if (cod == "trab")
-                { menut(); }
-                else
-                {
-                    string linea = "";
-                    using (leer = new StreamReader(usuariost))
+                    else
                     {
-                        while ((linea = leer.ReadLine()) != null)
+                        string linea = "";
+                        using (leer = new StreamReader(usuariosa))
                         {
-                            string[] datos = linea.Split('-');
-                            if (cod == datos[0])
+                            while ((linea = leer.ReadLine()) != null)
                             {
-                                menut();
+                                string[] datos = linea.Split('-');
+                                if (cod == datos[0])
+                                { menua(); }
                             }
+
+                            leer.Close();
                         }
-                        leer.Close();
+
                     }
                 }
+
+                else if (opcion == 2)
+                {
+                    Console.Write("   Escriba su código   ");
+                    string cod = Console.ReadLine();
+
+                    if (cod == "trab")
+                    { menut(); }
+                    else
+                    {
+                        string linea = "";
+                        using (leer = new StreamReader(usuariost))
+                        {
+                            while ((linea = leer.ReadLine()) != null)
+                            {
+                                string[] datos = linea.Split('-');
+                                if (cod == datos[0])
+                                {
+                                    menut();
+                                }
+                            }
+                            leer.Close();
+                        }
+                    }
+                }
+
             }
-
-
-
-
         }
         static void Main(string[] args)
-        {
-            inicioinv(); inicious(); iniciofac(); inicious2();
-            char seleccion = 'b';
-            while (seleccion == 'b')
+        {   inicio();
+            int salir = 0;
+            while (salir != 1)
             {
                 funcioninicial();
-                Console.Write("¿Desea salir?  a. Si  b. No   ");
-                seleccion = char.Parse(Console.ReadLine());
+
+                Console.WriteLine("Salir  1. Si   2. No");
+                salir = int.Parse(Console.ReadLine());
             }
-
-
+            
+            
         }
+
 
         static void menua()
         {
 
-            Console.WriteLine("\nEscriba la letra según el área a la que desea entrar");
-            Console.WriteLine("a. Inventario\nb. Usuarios\nc. Facturación");
-            Console.Write("  ");
+            Console.WriteLine("\n   Seleccione una opción:");
+            Console.Write("   a. Inventario  b. Usuarios  c. Facturación  d.Menú de acceso   ");
             char area = char.Parse(Console.ReadLine());
             administrador(area);
         }
@@ -188,114 +192,244 @@ namespace laboratorioempresa1
 
             if (area == 'a')
             {
+                Console.WriteLine("   INVENTARIO");
                 lecturainv(inventario);
-
+                
+                menua();
             }
 
             else if (area == 'b')
             {
-                Console.WriteLine("Seleccione una opción\na.Crear usuario   b.Ver usuarios registrados");
+                Console.Write("   Seleccione:\n   a.Crear usuario   b.Ver usuarios registrados   ");
                 char op = char.Parse(Console.ReadLine());
 
                 if (op == 'a')
                 {
-                    Console.WriteLine("Ingrese los siguientes datos:");
-                    Console.Write(" Nombre  ");
-                    string nombre = Console.ReadLine();
-                    Console.Write(" Apellido  ");
-                    string apellido = Console.ReadLine();
-                    Console.Write(" Edad  ");
-                    int edad = int.Parse(Console.ReadLine());
-                    Console.Write(" Puesto de trabajo:\n  1. Administrador\n  2. Trabajador");
-                    int puesto = int.Parse(Console.ReadLine());
-
-                    if (puesto == 1)
+                    int t = 0;
+                    while (t != 2)
                     {
-                        string puestoa = Console.ReadLine();
-                        puestoa = apellido + "admin";
-                        Console.WriteLine("Código de acceso: " + puestoa);
-                        escribir = File.AppendText(usuariosa);
-                        escribir.WriteLine(puestoa + '-' + apellido + '-' + nombre + '-' + edad);
-                        escribir.Close();
+                        Console.WriteLine("    Ingrese los siguientes datos:");
+                        Console.Write("      Nombre  ");
+                        string nombre = Console.ReadLine();
+                        Console.Write("      Apellido  ");
+                        string apellido = Console.ReadLine();
+                        Console.Write("      Edad  ");
+                        int edad = int.Parse(Console.ReadLine());
+                        Console.Write("      Puesto de trabajo:   1. Administrador  2. Trabajador    ");
+                        int puesto = int.Parse(Console.ReadLine());
+
+                        if (puesto == 1)
+                        {
+                            string puestoa = Console.ReadLine();
+                            puestoa = apellido + "admin";
+                            Console.WriteLine("     Código de acceso: " + puestoa);
+                            escribir = File.AppendText(usuariosa);
+                            escribir.WriteLine(puestoa + '-' + apellido + '-' + nombre + '-' + edad);
+                            Console.WriteLine("      Presione enter.");
+                            escribir.Close();
+                            Console.WriteLine("      Usuario creado.");
+                            
+                        }
+
+                        else if (puesto == 2)
+                        {
+                            string puestot = Console.ReadLine();
+                            puestot = apellido + "trab";
+                            Console.WriteLine("     Código de acceso: " + puestot);
+                            escribir = File.AppendText(usuariost);
+                            escribir.WriteLine(puestot + '-' + apellido + '-' + nombre + '-' + edad);
+                            escribir.Close();
+                            Console.WriteLine("      Usuario creado.");
+                            Console.WriteLine("      Presione enter.");
+                        }
+                        
+                        Console.Write("\n  Crear otro usuario  1. Si  2. No  ");
+                        t = int.Parse(Console.ReadLine());
                     }
 
-                    else if (puesto == 2)
-                    {
-                        string puestot = Console.ReadLine();
-                        puestot = apellido + "trab";
-                        Console.WriteLine("Código de acceso: " + puestot);
-                        escribir = File.AppendText(usuariost);
-                        escribir.WriteLine(puestot + '-' + apellido + '-' + nombre + '-' + edad);
-                        escribir.Close();
-                    }
-                    Console.WriteLine("Usuario creado.");
+                    menua();
                 }
 
                 else if (op == 'b')
                 {
+                    Console.WriteLine("USUARIOS");
                     lecturaus(usuariosa);
                     lecturaus2(usuariost);
+                    menua();
                 }
             }
             else if (area == 'c')
-            { lecturafac(facturacion); }
+            { Console.WriteLine("FACTURAS"); lecturafac(facturacion); menua(); }
+
+            else if (area == 'd')
+            { funcioninicial(); }
 
 
         }
 
         static void menut()
         {
-            Console.WriteLine("\nEscriba la letra según el área a la que desea entrar");
-            Console.WriteLine("a. Cargar inventario\nb. Facturar productos");
-            Console.Write("  ");
+            
+            Console.WriteLine("\n     Seleccione una opción:");
+            Console.Write("      a. Cargar inventario   b. Facturar productos   c.Menú de acceso   ");
             char area = char.Parse(Console.ReadLine());
-            trabajador(area);
+            trabajador(area);    
         }
+
         static void trabajador(char area)
         {
-
             if (area == 'a')
             {
-                Console.WriteLine("INVENTARIO\n Escriba los siguientes datos:");
-                Console.Write("  Producto  ");
-                string producto = Console.ReadLine();
-                Console.Write("  Precio  ");
-                double precio = double.Parse(Console.ReadLine());
-                Console.Write("  Cantidad  ");
-                string cantidad = Console.ReadLine();
-
-
+                int u = 0;
+                while (u != 2)
+                {
+                    Console.WriteLine("      Escriba los siguientes datos:");
+                    Console.Write("      Producto    ");
+                    string producto = Console.ReadLine();
+                    Console.Write("      Cantidad    ");
+                    int cantidad = int.Parse(Console.ReadLine());
+                    areainventario(producto, cantidad);
+                    Console.Write("       Agregar otro producto 1. Si 2. No  ");
+                    u = int.Parse(Console.ReadLine());
+                }
+                menut();
             }
 
             else if (area == 'b')
             {
-                correlativo++;
-                Console.WriteLine("FACTURACION\n Escriba los siguientes datos:");
-                Console.Write("  Nombre del cliente  ");
-                string cliente = Console.ReadLine();
-                Console.Write("  Nit  ");
-                string nit = Console.ReadLine();
-                Console.Write("  Fecha  ");
-                string fecha = Console.ReadLine();
-                Console.Write(" Producto comprado  ");
+                int u = 0;
+                while(u != 2)
+                { 
+                Console.WriteLine("      Escriba los siguientes datos:");
+                Console.Write("      Producto    ");
                 string producto = Console.ReadLine();
-                Console.Write("  Cantidad  ");
+                Console.Write("      Cantidad    ");
                 int cantidad = int.Parse(Console.ReadLine());
-                Console.Write(" Precio  ");
-                double precio = double.Parse(Console.ReadLine());
+                Console.Write("       Precio   ");
+                int precio = int.Parse(Console.ReadLine());
 
-                escribir = File.AppendText(facturacion);
-                escribir.WriteLine(" Correlativo de factura  " + correlativo);
-                escribir.WriteLine(" Nombre del Cliente  " + cliente);
-                escribir.WriteLine(" Nit del Cliente  " + nit);
-                escribir.WriteLine(" Fecha  " + fecha);
-                escribir.WriteLine(" Detalle de compra  " + producto + " " + '-' + " " + precio + " " + '-' + " " + cantidad);
-                escribir.WriteLine("Monto total a pagar   Q" + precio);
-                escribir.Close();
+               
+                string p = "";
+                leer = File.OpenText(inventario);
+                p = leer.ReadLine();
+
+                while (p != null)
+                {
+                    string[] vector = p.Split();
+                    if (producto != vector[0])
+                    {
+                        Console.WriteLine("No existe");
+                    }
+
+                    else
+                    {
+                        escribir = File.AppendText(inventario2);
+                        int c = int.Parse(vector[1]);
+                        c = c - cantidad;
+                        escribir.WriteLine("Dato actualizado:  " + vector[0] + '/' + c + '/' + vector[2]);
+
+                        if (producto != vector[0])
+                        {
+                            escribir.WriteLine(vector[0] + '/' + vector[1] + '/' + vector[2]);
+                        }
+
+                        escribir.Close();
+
+                        Console.Write("            Correlativo de factura:   ");
+                        int cor = int.Parse(Console.ReadLine());
+                        Console.Write("            Fecha:   ");
+                        string fecha = Console.ReadLine();
+                        Console.Write("            Nombre del Cliente:   ");
+                        string cliente = Console.ReadLine();
+                        Console.WriteLine("        Nit:   ");
+                        string nit = Console.ReadLine();
+                            string detalle = producto + " " + cantidad + " " + precio;
+                            Console.WriteLine("            Detalle de la compra:    " + detalle);
+                       
+                        int total = cantidad * precio;
+                        Console.WriteLine("            Monto total a pagar:   " + total);
+
+                        escribir = File.AppendText(facturacion);
+                        escribir.WriteLine("Correlativo de factura:  " + cor + "Fecha:  " + fecha);
+                        escribir.WriteLine("Nombre del cliente:  " + cliente + "Nit:  " + nit);
+                        escribir.WriteLine("Detalle de la compra:  " + detalle);
+                        escribir.WriteLine("Monto total a pagar:  " + total);
+                        escribir.Close();
+
+                        Console.WriteLine("          ***Producto facturado***");
+                    }
+                    p = leer.ReadLine();
+                }   
+                leer.Close();
+
+                Console.Write("       Agregar otra factura 1. Si 2. No  ");
+                u = int.Parse(Console.ReadLine());
+                }
+                menut();
 
             }
+            
+
+            else if (area == 'c')
+            {
+                funcioninicial();
+            }
+
+        }
 
 
+        static void areainventario(string producto, int cantidad)
+        {
+            string y = "";
+            string p = "";
+            leer = File.OpenText(inventario);
+            p = leer.ReadLine();
+            
+            while(p!= null)
+            {
+                string[] vector = p.Split();
+                if (producto != vector[0])
+                {
+                    y = "Agregado";
+                }
+
+                else
+                {
+                    
+                    escribir = File.AppendText(inventario2);
+                    int c = int.Parse(vector[1]);
+                    c = c + cantidad;
+                    escribir.WriteLine("Dato actualizado:  " + vector[0] + '/' + c + '/' + vector[2]);
+
+                    if (producto != vector[0])
+                    {
+                        escribir.WriteLine(vector[0] + '/' + vector[1] + '/' + vector[2]);
+                    }
+
+                    escribir.Close();
+                    
+                    Console.WriteLine("          ***Producto actualizado***");
+                }
+                p = leer.ReadLine();   
+            }
+            leer.Close();
+
+            if (y == "Agregado")
+            {
+
+                Console.Write("      Precio    ");
+                double precio = double.Parse(Console.ReadLine());
+                escribir = File.AppendText(inventario);
+                escribir.WriteLine(producto + '/' + cantidad + '/' + precio);
+                escribir.Close();
+                Console.WriteLine("        ---Producto Agregado---");
+            }
+
+            else
+            {
+                File.Move(inventario, inventario2);
+                File.Delete(inventario);
+            }
         }
     }
 }
