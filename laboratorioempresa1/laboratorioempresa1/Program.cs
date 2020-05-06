@@ -22,7 +22,7 @@ namespace laboratorioempresa1
         static StreamWriter escribir;
 
        
-        static int correlativo = 0;
+        
         static int opcion = 0;
 
 
@@ -240,7 +240,7 @@ namespace laboratorioempresa1
                             escribir.WriteLine(puestot + '-' + apellido + '-' + nombre + '-' + edad);
                             escribir.Close();
                             Console.WriteLine("      Usuario creado.");
-                            Console.WriteLine("      Presione enter.");
+                            
                         }
                         
                         Console.Write("\n  Crear otro usuario  1. Si  2. No  ");
